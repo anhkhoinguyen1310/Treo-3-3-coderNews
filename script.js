@@ -14,6 +14,7 @@ function renderArticles(articles)
         <div class="card-body">
           <h5 class="card-title">${a.title}</h5>
           <p class="card-text">${a.description}</p>
+          <p class="card-text"> ${moment(a.publishedAt).format('MMMM Do YYYY, h:mm:ss a')}</p>
           <a href="${a.url}" class="btn btn-primary">Read</a>
         </div>
       </div>
