@@ -32,10 +32,3 @@ function fetchData (){
  
 fetchData();
  
-// function renderArticles(aritcles)
-// {
-//     console.log({aSingleArti cle: article[0]});
-//     const articleHTMLArray = articles.map(a) => {
-//         return 
-//     }
-// }
