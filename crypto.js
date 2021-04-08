@@ -1,6 +1,6 @@
 const cryptoURL = "  https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=3&convert=USD&CMC_PRO_API_KEY=bb4ee065-7794-4b40-88ff-a1c23363abec";
 
-  function getHistoricPrices(prices) {
+  function getHistoricPrices(coin) {
     const {
       percent_change_90d,
       percent_change_60d,
@@ -9,7 +9,7 @@ const cryptoURL = "  https://pro-api.coinmarketcap.com/v1/cryptocurrency/listing
       percent_change_24h,
       percent_change_1h,
       price,
-    } = prices;
+    } = coin.quote.USD;
   
     const ninetyAgoPrice = calculatePriceFromPercentageChange(
       price,
@@ -64,8 +64,8 @@ const cryptoURL = "  https://pro-api.coinmarketcap.com/v1/cryptocurrency/listing
 
   function renderLineGraph(coin) {
     const ctx = document.getElementById("myChart");
-    const price = coin.quote.USD.price;
-    const [ninetyAgoPrice] = getHistoricPrices(coin);
+    const price = coin[2].quote.USD.price;
+    const [ninetyAgoPrice] = getHistoricPrices(coin[2]);
     const timeAgo = ["90d", "60d", "30d", "7d", "24h", "1h", "Current"];
     const myChart = new Chart(ctx, {
       type: "line",
@@ -73,11 +73,26 @@ const cryptoURL = "  https://pro-api.coinmarketcap.com/v1/cryptocurrency/listing
         labels: timeAgo,
         datasets: [
           {
-            label: "Price",
+            label: "Bitcoin",
             borderWidth: 1,
-            data: getHistoricPrices(coin.quote.USD),
+            data: getHistoricPrices(coin[0]),
             borderColor: "rgba(255, 99, 132, 1)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
+          },
+
+          {
+            label: "Etherum",
+            borderWidth: 1,
+            data: getHistoricPrices(coin[1]),
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+          },
+          {
+            label: "Price",
+            borderWidth: 1,
+            data: getHistoricPrices(coin[2]),
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
           },
         ],
       },
@@ -124,8 +139,7 @@ const cryptoURL = "  https://pro-api.coinmarketcap.com/v1/cryptocurrency/listing
 async function getCryptoPrices() {
     const response = await fetch(cryptoURL);
     const jsonData = await response.json();
-    const coin = jsonData.data[0];
-    renderLineGraph(coin);
-    console.log(coin);
+    renderLineGraph(jsonData.data);
+    
   }
   getCryptoPrices();
